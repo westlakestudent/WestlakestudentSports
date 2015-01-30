@@ -3,7 +3,6 @@ package com.west.ui;
 import com.west.activity.R;
 import com.west.adapter.PagerViewAdapter;
 import com.west.utils.ScaleUtil;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -39,6 +38,8 @@ public class WestRelativelayout extends RelativeLayout implements
 	private LinearLayout barlayout = null;
 	private ViewPager viewpager = null;
 	private ImageView roller = null;
+	private TextView left = null;
+	private TextView right = null;
 
 	private static final int BARLAYOUT = 0x000000f0;
 	private static final int ROLLER = 0x000000f1;
@@ -74,10 +75,10 @@ public class WestRelativelayout extends RelativeLayout implements
 
 		LinearLayout.LayoutParams lp = null;
 
-		TextView left = new TextView(context);
+		left = new TextView(context);
 		left.setGravity(Gravity.CENTER);
 		left.setTextColor(Color.GRAY);
-		left.setText("运动数据");
+		left.setText(R.string.sport_data);
 		left.setTextSize(15);
 		left.setOnClickListener(this);
 		lp = new LinearLayout.LayoutParams(
@@ -87,9 +88,9 @@ public class WestRelativelayout extends RelativeLayout implements
 		lp.gravity = Gravity.CENTER_VERTICAL;
 		barlayout.addView(left, lp);
 
-		TextView right = new TextView(context);
+		right = new TextView(context);
 		right.setGravity(Gravity.CENTER);
-		right.setText("运动轨迹");
+		right.setText(R.string.sport_road);
 		right.setTextSize(15);
 		right.setTextColor(Color.GRAY);
 		right.setOnClickListener(this);
@@ -172,7 +173,12 @@ public class WestRelativelayout extends RelativeLayout implements
 
 	@Override
 	public void onClick(View v) {
-
+		if(v == left){
+			viewpager.setCurrentItem(0);
+		}else{
+			viewpager.setCurrentItem(1);
+		}
+			
 	}
 
 }
