@@ -7,6 +7,7 @@ import com.west.adapter.PagerViewAdapter;
 import com.west.ui.WestDrawerL;
 import com.west.ui.WestRelativelayout;
 import com.west.utils.ScaleUtil;
+import com.west.utils.WestTimer;
 import com.west.widget.ActionBarDrawerToggle;
 import com.west.widget.DrawerArrowDrawable;
 
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
 
+	private WestTimer mWestTimer = null;
 	private WestDrawerL mDrawerLayout = null;
 	private WestRelativelayout layout = null;
 	private ActionBarDrawerToggle mDrawerToggle = null;
@@ -41,6 +43,8 @@ public class MainActivity extends Activity {
 
 		LocalMgr = new LocalActivityManager(this, true);
 		LocalMgr.dispatchCreate(savedInstanceState);
+		mWestTimer = WestTimer.getTimer();
+//		mWestTimer.start();
 
 		drawerArrow = new DrawerArrowDrawable(this) {
 			@Override
@@ -135,5 +139,13 @@ public class MainActivity extends Activity {
 		super.onResume();
 		LocalMgr.dispatchResume();
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+//		mWestTimer.stop();
+	}
+	
+	
 
 }
