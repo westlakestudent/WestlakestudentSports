@@ -7,6 +7,8 @@
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
     <string name="sport_data">运动数据</string>
-     <string name="sport_road">运动轨迹</string>
+    <string name="sport_road">运动轨迹</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
 
 </resources>

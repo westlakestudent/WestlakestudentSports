@@ -10,8 +10,11 @@ import com.west.utils.ScaleUtil;
 import com.west.utils.WestTimer;
 import com.west.widget.ActionBarDrawerToggle;
 import com.west.widget.DrawerArrowDrawable;
+import com.west.widget.dialog.Effectstype;
+import com.west.widget.dialog.NiftyDialogBuilder;
 
 import android.os.Bundle;
+import android.os.Process;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.LocalActivityManager;
@@ -19,18 +22,20 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
 
-	private WestTimer mWestTimer = null;
 	private WestDrawerL mDrawerLayout = null;
 	private WestRelativelayout layout = null;
 	private ActionBarDrawerToggle mDrawerToggle = null;
 	private DrawerArrowDrawable drawerArrow = null;
 	private LocalActivityManager LocalMgr = null;
+	private NiftyDialogBuilder dialogBuilder = null;
+	private WestTimer mWestTimer = null;
 	private List<View> views = new ArrayList<View>();
 
 	@Override
@@ -43,8 +48,11 @@ public class MainActivity extends Activity {
 
 		LocalMgr = new LocalActivityManager(this, true);
 		LocalMgr.dispatchCreate(savedInstanceState);
+
+		dialogBuilder = NiftyDialogBuilder.getInstance(this);
+		dialogBuilder.withTitle("提示").withMessage("真的要退出吗?");
+		
 		mWestTimer = WestTimer.getTimer();
-//		mWestTimer.start();
 
 		drawerArrow = new DrawerArrowDrawable(this) {
 			@Override
@@ -54,7 +62,7 @@ public class MainActivity extends Activity {
 		};
 		initpagers();
 		initView();
-		
+
 		setContentView(mDrawerLayout);
 	}
 
@@ -67,7 +75,7 @@ public class MainActivity extends Activity {
 
 	private void initView() {
 		PagerViewAdapter pageradapter = new PagerViewAdapter(views);
-		layout = new WestRelativelayout(this,this,pageradapter);
+		layout = new WestRelativelayout(this, this, pageradapter);
 
 		mDrawerLayout = new WestDrawerL(this, layout);
 
@@ -143,9 +151,40 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-//		mWestTimer.stop();
+		if(mWestTimer.isStarted())
+			mWestTimer.stop();
 	}
-	
-	
+
+	@Override
+	public void onBackPressed() {
+		// super.onBackPressed();
+		dialogBuilder.withEffect(Effectstype.Slidetop)
+				.withTitleColor("#FFFFFF").withDividerColor("#11000000")
+				.withMessageColor("#FFFFFFFF").withDialogColor("#66B3FF")
+				.withIcon(getResources().getDrawable(R.drawable.ic_launcher))
+				.withDuration(200).isCancelableOnTouchOutside(true)
+				.setButton1Click(confirm).setButton2Click(cancel)
+				.withButton1Text("确定").withButton2Text("取消");
+		dialogBuilder.show();
+	}
+
+	private OnClickListener cancel = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			dialogBuilder.dismiss();
+		}
+	};
+
+	private OnClickListener confirm = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			dialogBuilder.dismiss();
+			MainActivity.this.finish();
+			Process.killProcess(Process.myPid());
+			System.exit(0);
+		}
+	};
 
 }

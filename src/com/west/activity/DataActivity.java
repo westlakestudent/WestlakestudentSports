@@ -2,9 +2,9 @@ package com.west.activity;
 
 import com.west.interfaces.OnTimeChangedListener;
 import com.west.utils.WestTimer;
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 /**
@@ -21,6 +21,7 @@ public class DataActivity extends Activity implements OnTimeChangedListener{
 	
 	private TextView timeText = null;
 	
+	private static final String TAG = "DataActivity";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,4 +40,12 @@ public class DataActivity extends Activity implements OnTimeChangedListener{
 		timeText.setText(time);
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG, "onDestroy");
+		if(mWestTimer != null)
+			mWestTimer.stop();
+	}
+	
 }

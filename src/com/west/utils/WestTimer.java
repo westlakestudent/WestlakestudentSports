@@ -1,8 +1,8 @@
 package com.west.utils;
 
+import com.west.constant.Constants;
+import com.west.handler.TimerHandler;
 import com.west.interfaces.OnTimeChangedListener;
-
-import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
@@ -20,8 +20,6 @@ public class WestTimer {
 
 	private static WestTimer instance = null;
 
-	private static final int SIGNAL = 0;
-
 	private OnTimeChangedListener mOnTimeChangedListener = null;
 
 	private int hour = 0;
@@ -30,7 +28,12 @@ public class WestTimer {
 
 	private int sec = 0;
 
+	private TimerHandler handler = null;
+
+	private boolean isStarted = false;
+
 	private WestTimer() {
+		Log.i(TAG, "private construct");
 	}
 
 	public static WestTimer getTimer() {
@@ -42,17 +45,24 @@ public class WestTimer {
 
 	public void registerTimer(OnTimeChangedListener l) {
 		mOnTimeChangedListener = l;
+		handler = new TimerHandler(mOnTimeChangedListener);
 	}
 
 	public void start() {
-		if (mOnTimeChangedListener != null) {
-			mOnTimeChangedListener.change(requireTime());
+		if (!isStarted()) {
+			if (mOnTimeChangedListener != null) {
+				mOnTimeChangedListener.change(requireTime());
+			}
+			handler.post(timeTask);
+			isStarted = true;
+			Log.d(TAG, "Timer is start...");
 		}
-		handler.post(timeTask);
 	}
 
 	public void pause() {
 		handler.removeCallbacks(timeTask);
+		isStarted = false;
+		Log.d(TAG, "Timer is paused...");
 	}
 
 	public void reset() {
@@ -60,49 +70,44 @@ public class WestTimer {
 		hour = 0;
 		min = 0;
 		sec = 0;
+		isStarted = false;
+		Log.d(TAG, "Timer is reset...");
 	}
 
 	public void stop() {
-		handler.removeCallbacks(timeTask);
+		if(isStarted()){
+			handler.removeCallbacks(timeTask);
+			isStarted = false;
+			Log.d(TAG, "Timer is stop...");
+		}
+		
 	}
 
-	Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			if (msg.what == SIGNAL) {
-				String time = (String)msg.obj;
-				Log.i(TAG, time);
-				if (mOnTimeChangedListener != null) {
-					mOnTimeChangedListener.change(time);
-				}
-			}
-		}
-
-	};
+	public boolean isStarted() {
+		return isStarted;
+	}
 
 	private Runnable timeTask = new Runnable() {
 
 		@Override
 		public void run() {
-			if (sec >= 59) {
+			if (sec == 60) {
 				min++;
 				sec = 0;
 			}
 
-			if (min == 59 && sec == 59) {
+			if (min == 59 && sec == 60) {
 				hour++;
 				min = 0;
 				sec = 0;
 			}
 
 			String time = requireTime();
-			
+
 			Message msg = handler.obtainMessage();
 			msg.obj = time;
-			msg.what = SIGNAL;
-			
+			msg.what = Constants.TIMERSIGNAL;
+
 			handler.sendMessage(msg);
 			sec++;
 			handler.postDelayed(timeTask, 1000);
@@ -123,13 +128,13 @@ public class WestTimer {
 		if (min < 10) {
 			smin = "0" + min;
 		} else {
-			String.valueOf(min);
+			smin = String.valueOf(min);
 		}
 
 		if (hour < 10) {
 			shour = "0" + hour;
 		} else {
-			String.valueOf(hour);
+			shour = String.valueOf(hour);
 		}
 
 		return shour + ":" + smin + ":" + ssec;
