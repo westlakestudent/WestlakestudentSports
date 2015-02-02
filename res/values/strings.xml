@@ -10,5 +10,6 @@
     <string name="sport_road">运动轨迹</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
+    <string name="default_time">88:88:88</string>
 
 </resources>

@@ -1,8 +1,12 @@
 package com.west.utils;
 
+import java.util.Locale;
+
 import com.west.constant.Constants;
 import com.west.handler.TimerHandler;
 import com.west.interfaces.OnTimeChangedListener;
+
+import android.annotation.SuppressLint;
 import android.os.Message;
 import android.util.Log;
 
@@ -14,6 +18,7 @@ import android.util.Log;
  * @version 1.0.0
  * 
  */
+@SuppressLint("DefaultLocale")
 public class WestTimer {
 
 	private static final String TAG = "WestTimer";
@@ -21,6 +26,8 @@ public class WestTimer {
 	private static WestTimer instance = null;
 
 	private OnTimeChangedListener mOnTimeChangedListener = null;
+
+	private static final String DATE_FORMAT = "%02d:%02d:%02d";
 
 	private int hour = 0;
 
@@ -75,12 +82,12 @@ public class WestTimer {
 	}
 
 	public void stop() {
-		if(isStarted()){
+		if (isStarted()) {
 			handler.removeCallbacks(timeTask);
 			isStarted = false;
 			Log.d(TAG, "Timer is stop...");
 		}
-		
+
 	}
 
 	public boolean isStarted() {
@@ -91,16 +98,23 @@ public class WestTimer {
 
 		@Override
 		public void run() {
-			if (sec == 60) {
-				min++;
+			if (hour == 59 && min == 59 && sec == 60) {
+				hour = 0;
+				min = 0;
 				sec = 0;
 			}
-
+			
 			if (min == 59 && sec == 60) {
 				hour++;
 				min = 0;
 				sec = 0;
 			}
+			
+			if (sec == 60) {
+				min++;
+				sec = 0;
+			}
+
 
 			String time = requireTime();
 
@@ -115,32 +129,37 @@ public class WestTimer {
 	};
 
 	private String requireTime() {
-		String shour = "";
-		String smin = "";
-		String ssec = "";
+		/*
+		 * String shour = ""; String smin = ""; String ssec = "";
+		 * 
+		 * 
+		 * if (sec < 10) { ssec = "0" + sec; } else { ssec =
+		 * String.valueOf(sec); }
+		 * 
+		 * if (min < 10) { smin = "0" + min; } else { smin =
+		 * String.valueOf(min); }
+		 * 
+		 * if (hour < 10) { shour = "0" + hour; } else { shour =
+		 * String.valueOf(hour); }
+		 */
 
-		if (sec < 10) {
-			ssec = "0" + sec;
-		} else {
-			ssec = String.valueOf(sec);
-		}
-
-		if (min < 10) {
-			smin = "0" + min;
-		} else {
-			smin = String.valueOf(min);
-		}
-
-		if (hour < 10) {
-			shour = "0" + hour;
-		} else {
-			shour = String.valueOf(hour);
-		}
-
-		return shour + ":" + smin + ":" + ssec;
+		return String.format(Locale.CHINA, DATE_FORMAT, hour, min, sec);
 	}
 
 	public String Acquire() {
 		return requireTime();
 	}
+
+	public int getHour() {
+		return hour;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public int getSec() {
+		return sec;
+	}
+
 }

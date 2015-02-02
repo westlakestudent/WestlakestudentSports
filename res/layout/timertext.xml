@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android ="http://schemas.android.com/apk/res/android" >
+
+    <TextView
+        android:id="@+id/main_clock_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="#23a3f4"
+        android:textSize="80sp" />
+    
+    
+
+</merge>
+

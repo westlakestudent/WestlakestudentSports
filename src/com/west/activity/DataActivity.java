@@ -26,9 +26,9 @@ public class DataActivity extends Activity implements OnTimeChangedListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.test1);
+		setContentView(R.layout.timertext);
 		
-		timeText = (TextView)findViewById(R.id.time);
+		timeText = (TextView)findViewById(R.id.main_clock_time);
 		
 		mWestTimer = WestTimer.getTimer();
 		mWestTimer.registerTimer(this);
