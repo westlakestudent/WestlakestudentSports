@@ -10,6 +10,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * 
@@ -51,6 +52,10 @@ public class WestDrawerL extends DrawerLayout {
 				LayoutParams.MATCH_PARENT);
 		params.gravity = Gravity.START;
 		addView(navdrawer, params);
+		
+		TextView test = new TextView(context);
+		test.setText("≤‚ ‘");
+		navdrawer.addFooterView(test);
 	}
 	
 	

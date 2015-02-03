@@ -6,7 +6,6 @@ import com.west.constant.Constants;
 import com.west.handler.TimerHandler;
 import com.west.interfaces.OnTimeChangedListener;
 
-import android.annotation.SuppressLint;
 import android.os.Message;
 import android.util.Log;
 
@@ -18,7 +17,6 @@ import android.util.Log;
  * @version 1.0.0
  * 
  */
-@SuppressLint("DefaultLocale")
 public class WestTimer {
 
 	private static final String TAG = "WestTimer";
@@ -33,7 +31,7 @@ public class WestTimer {
 
 	private int min = 0;
 
-	private int sec = 0;
+	private int sec = 1;
 
 	private TimerHandler handler = null;
 
@@ -57,9 +55,6 @@ public class WestTimer {
 
 	public void start() {
 		if (!isStarted()) {
-			if (mOnTimeChangedListener != null) {
-				mOnTimeChangedListener.change(requireTime());
-			}
 			handler.post(timeTask);
 			isStarted = true;
 			Log.d(TAG, "Timer is start...");
@@ -78,6 +73,9 @@ public class WestTimer {
 		min = 0;
 		sec = 0;
 		isStarted = false;
+		if (mOnTimeChangedListener != null) {
+			mOnTimeChangedListener.change(requireTime());
+		}
 		Log.d(TAG, "Timer is reset...");
 	}
 
