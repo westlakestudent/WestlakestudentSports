@@ -32,7 +32,7 @@ public class TimerHandler extends Handler {
 			String time = (String)msg.obj;
 			Log.i(TAG, time);
 			if (mOnTimeChangedListener != null) {
-				mOnTimeChangedListener.change(time);
+				mOnTimeChangedListener.onTimechanged(time);
 			}
 		}
 	}

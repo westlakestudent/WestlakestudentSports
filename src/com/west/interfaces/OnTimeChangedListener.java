@@ -10,6 +10,6 @@ package com.west.interfaces;
  */
 public interface OnTimeChangedListener {
 
-	void change(String time);
+	void onTimechanged(String time);
 	
 }

@@ -11,10 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.west.activity.R;
+import com.west.interfaces.ClickListenerCallBack;
 import com.west.utils.ScaleUtil;
-import com.west.utils.WestTimer;
 
 /**
  * 
@@ -44,7 +43,7 @@ public class DataShowView extends RelativeLayout implements OnClickListener {
 
 	private Button overBtn = null;
 	
-	private WestTimer mWestTimer = null;
+	private ClickListenerCallBack callback = null;
 
 	private static final int SHOWVIEW = 0x000000f2;
 
@@ -54,10 +53,10 @@ public class DataShowView extends RelativeLayout implements OnClickListener {
 		createUI(context);
 	}
 	
-	public DataShowView(Context context,WestTimer timer){
+	public DataShowView(Context context,ClickListenerCallBack back){
 		super(context);
 		Log.d(TAG, "create");
-		mWestTimer = timer;
+		callback = back;
 		createUI(context);
 	}
 
@@ -170,43 +169,47 @@ public class DataShowView extends RelativeLayout implements OnClickListener {
 	}
 
 	public void refreshTime(String timestr) {
-		if (time != null)
+		if (timestr != null)
 			time.refreshShow(timestr);
 	}
 
 	public void refreshDistance(String dis) {
-		if (distance != null)
+		if (dis != null)
 			distance.refreshDis(dis);
 	}
 
 	public void refreshCalorie(String c) {
-		if (calorie != null)
+		if (c != null)
 			calorie.refreshShow(c);
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v == startBtn) {
-			mWestTimer.start();
 			startBtn.setVisibility(GONE);
 			stopBtn.setVisibility(VISIBLE);
+			if(callback != null)
+				callback.startCallback();
 		} else if (v == stopBtn) {
-			mWestTimer.pause();
 			continueBtn.setVisibility(VISIBLE);
 			overBtn.setVisibility(VISIBLE);
 			stopBtn.setVisibility(GONE);
+			if(callback != null)
+				callback.stopCallback();
 		} else if (v == overBtn) {
-			mWestTimer.reset();
 			startBtn.setVisibility(VISIBLE);
 			stopBtn.setVisibility(GONE);
 			continueBtn.setVisibility(GONE);
 			overBtn.setVisibility(GONE);
+			if(callback != null)
+				callback.overCallback();
 		} else if (v == continueBtn) {
-			mWestTimer.start();
 			startBtn.setVisibility(GONE);
 			stopBtn.setVisibility(VISIBLE);
 			continueBtn.setVisibility(GONE);
 			overBtn.setVisibility(GONE);
+			if(callback != null)
+				callback.continueCallback();
 		}
 	}
 

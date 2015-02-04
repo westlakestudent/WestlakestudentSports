@@ -74,7 +74,7 @@ public class WestTimer {
 		sec = 0;
 		isStarted = false;
 		if (mOnTimeChangedListener != null) {
-			mOnTimeChangedListener.change(requireTime());
+			mOnTimeChangedListener.onTimechanged(requireTime());
 		}
 		Log.d(TAG, "Timer is reset...");
 	}

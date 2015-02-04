@@ -1,5 +1,7 @@
 package com.west;
 
+import com.baidu.mapapi.SDKInitializer;
+
 import android.app.Application;
 
 /**
@@ -12,4 +14,11 @@ import android.app.Application;
  */
 public class SportsApplication extends Application {
 
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		SDKInitializer.initialize(this);
+	}
+
+	
 }
